@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/default-namespace-server/default-namespace-server.iml" filepath="$PROJECT_DIR$/default-namespace-server/default-namespace-server.iml" />
+      <module fileurl="file://$PROJECT_DIR$/doEngine.iml" filepath="$PROJECT_DIR$/doEngine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/doEngine-client/doEngine-client.iml" filepath="$PROJECT_DIR$/doEngine-client/doEngine-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/doEngine-core/doEngine-core.iml" filepath="$PROJECT_DIR$/doEngine-core/doEngine-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/doEngine-oauth2/doEngine-oauth2.iml" filepath="$PROJECT_DIR$/doEngine-oauth2/doEngine-oauth2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/doEngine-session/doEngine-session.iml" filepath="$PROJECT_DIR$/doEngine-session/doEngine-session.iml" />
+      <module fileurl="file://$PROJECT_DIR$/doEngine-test/doEngine-test.iml" filepath="$PROJECT_DIR$/doEngine-test/doEngine-test.iml" />
+    </modules>
+  </component>
+</project>

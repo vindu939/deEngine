@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Gradle: com.talentica:graphite-search:0.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/talentica/graphite-search/0.1/graphite-search-0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

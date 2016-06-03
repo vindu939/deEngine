@@ -1,0 +1,8 @@
+rootProject.name = 'doEngine'
+include 'doEngine-client'
+include 'doEngine-core'
+include 'default-namespace-server'
+include 'doEngine-session'
+include 'doEngine-oauth2'
+include 'doEngine-test'
+
