@@ -1,4 +1,3 @@
-import com.talentica.doEngine.client.Application;
 import com.talentica.doEngine.client.Publisher;
 import com.talentica.doEngine.client.Receiver;
 import com.talentica.doEngine.client.telegram.TelegramBot;
@@ -18,9 +17,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import reactor.Environment;
 import reactor.bus.EventBus;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static reactor.bus.selector.Selectors.$;
 

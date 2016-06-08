@@ -24,6 +24,8 @@ public class SessionMetaData {
 
     private SystemState systemState;
 
+    private boolean isGoodBye;// Remove later
+
     public Integer getUserId() {
         return userId;
     }
@@ -102,5 +104,13 @@ public class SessionMetaData {
 
     public void setSystemState(SystemState systemState) {
         this.systemState = systemState;
+    }
+
+    public boolean isGoodBye() {
+        return isGoodBye;
+    }
+
+    public void setGoodBye(boolean goodBye) {
+        isGoodBye = goodBye;
     }
 }

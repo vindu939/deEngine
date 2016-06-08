@@ -1,7 +1,5 @@
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talentica.doEngine.session.AuthObject;
-import com.talentica.doEngine.session.SessionManager;
 import org.junit.Test;
 
 import java.io.IOException;

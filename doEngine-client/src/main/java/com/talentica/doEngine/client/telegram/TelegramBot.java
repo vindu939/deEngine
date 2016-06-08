@@ -4,8 +4,8 @@ package com.talentica.doEngine.client.telegram;
 import com.talentica.doEngine.client.telegram.impl.FileApi;
 import com.talentica.doEngine.client.telegram.impl.TelegramBotClient;
 import com.talentica.doEngine.client.telegram.model.File;
-import com.talentica.doEngine.client.telegram.response.BaseResponse;
 import com.talentica.doEngine.client.telegram.request.BaseRequest;
+import com.talentica.doEngine.client.telegram.response.BaseResponse;
 
 /**
  * Stas Parshin

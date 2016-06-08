@@ -1,8 +1,11 @@
 package com.talentica.doEngine.core;
 
+import com.talentica.doEngine.core.Responses.GoodByes;
+import com.talentica.doEngine.core.Responses.Greetings;
 import com.talentica.doEngine.session.*;
 import com.talentica.graphite.search.context.SystemQuery;
 import com.talentica.graphite.search.context.TextContext;
+import com.talentica.graphite.search.context.UserQuery;
 import com.talentica.graphite.search.context.UserQuerySession;
 import com.talentica.graphite.search.exception.SearchException;
 import com.talentica.graphite.store.StoreResources;
@@ -40,12 +43,10 @@ public class Receiver implements Consumer<Event<Object>> {
 
         if(uqs == null){
             String namespace = sessionMetaData.getNamespace();
-            String businessEndpoint = sessionMetaData.getEndpoint();
 
             StoreResources storeResources = new StoreResources(StoreResources.StoreType.blazegraph, namespace);
             try {
                 uqs = new UserQuerySession(storeResources);
-                uqs.setBusinessEndpointUrl(businessEndpoint);
             } catch (SearchException e) {
                 e.printStackTrace();
             } catch (StoreException e) {
@@ -56,21 +57,44 @@ public class Receiver implements Consumer<Event<Object>> {
         }
 
         String textMessage = sessionObject.getSessionMetaData().getMessage();
-
+        if(sessionObject.getSessionState() == SessionState.REQUEST_INIT) {
+            if (textMessage.equalsIgnoreCase("/admin")){
+                textMessage = "hi";
+            }
+            String businessEndpoint = sessionMetaData.getEndpoint();
+            uqs.setBusinessEndpointUrl(businessEndpoint);
+        }
         // Find a better way to handle the commands
         if(sessionObject.getSessionState() == SessionState.AUTH_INIT){
             textMessage = "login";
             uqs.addHeader("Authorization", sessionMetaData.getBasicAuthToken());
             uqs.addHeader("Content-Type", "application/x-www-form-urlencoded");
+            uqs.setBusinessEndpointUrl("http://localhost:8081");
         }
 
         if(sessionMetaData.isAuthRequired() && sessionMetaData.getAuthToken() != null){
             uqs.addHeader("Authorization", sessionMetaData.getAuthToken());
         }
 
-        // process the text and generate response data
-        DoEngineHandler doEngineHandler = new DoEngineHandler(uqs);
-        doEngineHandler.handleTextMessage(textMessage);
+        // Remove this implementations of greetings and good bye's later
+        Greetings greetings = new Greetings();
+        GoodByes goodByes = new GoodByes();
+
+        if (greetings.isApplicable(textMessage)){
+            uqs.addSystemResponse(greetings.getResponse());
+        } else if(goodByes.isApplicable(textMessage)){
+            uqs.addSystemResponse(goodByes.getResponse());
+            sessionMetaData.setGoodBye(true);
+        } else{
+            // process the text and generate response data
+            DoEngineHandler doEngineHandler = new DoEngineHandler(uqs);
+            try {
+                doEngineHandler.handleTextMessage(textMessage);
+            }  catch (Exception e) {
+                e.printStackTrace();
+                uqs.addSystemResponse("{\"status\":500}");
+            }
+        }
 
         TextContext context = uqs.getContext();
         System.out.println(context.getActor() + " : "
@@ -79,6 +103,9 @@ public class Receiver implements Consumer<Event<Object>> {
         SystemState systemState = SystemState.RESPONSE;
         if (context instanceof SystemQuery) {
             systemState = SystemState.QUERY;
+        } else if (context instanceof UserQuery) {
+            uqs.addSystemResponse("{\"status\":500, \"data\": \"Sorry! I don't know what do u mean\"}");
+            systemState = SystemState.RESPONSE;
         }
 
         sessionMetaData.setSystemState(systemState);

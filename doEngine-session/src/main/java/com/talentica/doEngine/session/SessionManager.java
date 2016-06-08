@@ -19,33 +19,32 @@ public class SessionManager {
 
     public static String getSessionID(SessionMetaData sessionMetaData){
         Integer userId = sessionMetaData.getUserId();
-        SessionType optedType = sessionMetaData.getOptedSessionType();
-        addPropertiesToSessionMetadata(sessionMetaData);
         String sessionId = userSessionMap.get(userId);
         SessionObject sessionObject = session.get(sessionId);
 
-        // If session object is available and session state is done then remove the session object
-        if (sessionObject != null && (sessionObject.getSessionState() == SessionState.AUTH_DONE ||
-                sessionObject.getSessionState() == SessionState.REQUEST_DONE)){
-            session.remove(sessionId);
-            sessionObject = null;
-        }
+        if (sessionObject != null) {
 
-        if (sessionObject != null){
-            // Create a new session if requested for admin session even in middle of user session
-            // Figure a way to implement this in client receiver, to prompt user before ending session abruptly
-            if(sessionObject.getSessionState().ordinal() >= SessionState.REQUEST_INIT.ordinal()){
-                if (!(optedType == SessionType.ADMIN)) {
-                    session.remove(sessionId);
-                    sessionId = createSessionObject(sessionMetaData);
-                }
-            } else {
+            // Update the session if states other than done
+            SessionState sessionState = sessionObject.getSessionState();
+            if (sessionState != SessionState.AUTH_DONE && sessionState != SessionState.REQUEST_DONE) {
                 sessionObject.getSessionMetaData().setMessage(sessionMetaData.getMessage());
                 updateSession(sessionId, sessionObject);
+                return sessionId;
             }
-        } else {
-            sessionId = createSessionObject(sessionMetaData);
+
+            // OptedSession will be old unless (new is admin and old != new)
+            SessionMetaData oldSessionMetaData = sessionObject.getSessionMetaData();
+            if (oldSessionMetaData.getOptedSessionType() == SessionType.ADMIN ||
+                    oldSessionMetaData.getOptedSessionType() == sessionMetaData.getOptedSessionType()) {
+                sessionMetaData.setOptedSessionType(oldSessionMetaData.getOptedSessionType());
+            }
+
+            // Remove the old session if states are _DONE
+            session.remove(sessionId);
         }
+
+        addPropertiesToSessionMetadata(sessionMetaData);
+        sessionId = createSessionObject(sessionMetaData);
 
         return sessionId;
     }

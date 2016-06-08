@@ -28,7 +28,10 @@ repositories {
 dependencies {
     compile "org.springframework.boot:spring-boot-starter",
             "org.springframework.boot:spring-boot-starter-web",
-            /*"org.springframework.boot:spring-boot-starter-security",*/
+            "org.springframework.boot:spring-boot-starter-security",
+            "org.springframework.security.oauth:spring-security-oauth2",
+            "org.springframework.boot:spring-boot-starter-jdbc",
+            "mysql:mysql-connector-java",
             "com.talentica:graphite-search:0.1",
             "com.talentica:graphite-store:0.1"
     testCompile "junit:junit:4.11"

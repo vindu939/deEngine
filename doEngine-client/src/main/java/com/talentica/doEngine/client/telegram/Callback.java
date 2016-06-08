@@ -1,7 +1,7 @@
 package com.talentica.doEngine.client.telegram;
 
-import com.talentica.doEngine.client.telegram.response.BaseResponse;
 import com.talentica.doEngine.client.telegram.request.BaseRequest;
+import com.talentica.doEngine.client.telegram.response.BaseResponse;
 
 import java.io.IOException;
 

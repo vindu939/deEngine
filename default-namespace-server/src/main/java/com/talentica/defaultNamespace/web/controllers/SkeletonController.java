@@ -114,9 +114,9 @@ public class SkeletonController {
     public PropertyAtom addProperty(@RequestBody SkeletonRequest data){
         PropertyAtom propertyAtom = null;
         String propertyName = data.getProperty();
-        String objectName = data.getObject();
+        String className = data.getClazz();
         try {
-            ClassAtom domainAtom = (ClassAtom) optedClassAtomStore.getOrCreate(objectName);
+            ClassAtom domainAtom = (ClassAtom) optedClassAtomStore.getOrCreate(className);
             ClassAtom rangeAtom = (ClassAtom) optedClassAtomStore.getOrCreate(SystemVocabulary.SHINGLE_ATOM_CLAZZ_URI);
 
             propertyAtom = optedPropertyAtomStore.getOrCreate(propertyName,domainAtom.getUri(), rangeAtom.getUri());
@@ -141,6 +141,8 @@ public class SkeletonController {
         String label = data.getLabel();
         try {
             URI verbAtomUri = URI.create(SystemVocabulary.GRAPHITE.toString().concat("/Action#").concat(label));
+            // Dummy for creating verb class
+            ClassAtom verbClassAtom = (ClassAtom) optedClassAtomStore.getOrCreate(SystemVocabulary.VERB_ATOM_CLAZZ_URI);
             verbAtom = new VerbAtom(-1, verbAtomUri, label);
             optedClassAtomStore.saveVerbAtom(verbAtom);
             DomainAction domainAction = new DomainAction(label);
@@ -152,6 +154,8 @@ public class SkeletonController {
         } catch (StoreException e) {
             e.printStackTrace();
         } catch (ObjectWriteException e) {
+            e.printStackTrace();
+        } catch (InvalidAtomException e) {
             e.printStackTrace();
         } finally {
             if(verbAtom != null) {
@@ -171,6 +175,10 @@ public class SkeletonController {
         String restEndpoint = data.getRestEndpoint();
         String endpointType = data.getEndpointType();
         String synonym = data.getSynonym();
+
+        if (synonym == null){
+            synonym = "";
+        }
 
         try {
 
@@ -209,7 +217,7 @@ public class SkeletonController {
         VerbAtom verbAtom = null;
 
         String action = data.getAction();
-        String object = data.getObject();
+        String object = data.getClazz();
         String label = data.getLabel();
 
         if(label != null && label.isEmpty()){
@@ -229,8 +237,8 @@ public class SkeletonController {
             final VerbInputAtom verbInputAtom = new VerbInputAtom(paramUri, label, verbAtom);
             optedPropertyAtomStore.saveVerbInputAtom(verbInputAtom);
 
-            verbAtom.addInputAtom(verbInputAtom, objectAtom);
-            optedClassAtomStore.saveVerbAtom(verbAtom);
+            /*verbAtom.addInputAtom(verbInputAtom, objectAtom);
+            optedClassAtomStore.saveVerbAtom(verbAtom);*/
 
             DomainInput domainInput = new DomainInput(label);
             defaultObjectAtomStore.writeObjectAtom(domainInput);
@@ -256,27 +264,30 @@ public class SkeletonController {
     public VerbAtom addInputAttributes(@RequestBody SkeletonRequest data){
         VerbAtom verbAtom = null;
         String action = data.getAction();
-        String label = data.getLabel();
-        String object = data.getObject();
+        String input = data.getInput();
+        String clazz = data.getClazz();
 
         String userQuery = data.getUserQuery();
         String isOptional = data.getIsOptional();
+        if (isOptional == null){
+            isOptional = "false";
+        }
         try {
-            ClassAtom objectAtom = (ClassAtom) optedClassAtomStore.getOrCreate(object);
+            ClassAtom objectAtom = (ClassAtom) optedClassAtomStore.getOrCreate(clazz);
 
             URI verbAtomUri = URI.create(SystemVocabulary.GRAPHITE.toString().concat("/Action#").concat(action));
             verbAtom = new VerbAtom(-1, verbAtomUri, action);
 
             URI paramUri = URI.create(SystemVocabulary.VERB_ATOM_INPUT_URI.toString()
-                    .replace("#","/").concat("#").concat(label));
+                    .replace("#","/").concat("#").concat(input));
 
-            final VerbInputAtom verbInputAtom = new VerbInputAtom(paramUri, label, verbAtom);
+            final VerbInputAtom verbInputAtom = new VerbInputAtom(paramUri, input, verbAtom);
 
             if(userQuery != null && !userQuery.isEmpty()) {
                 verbInputAtom.addAttribute(SystemVocabulary.VERB_ATOM_USER_QUERY_URI.toString(),userQuery);
             }
 
-            verbInputAtom.addAttribute(SystemVocabulary.VERB_ATOM_INPUT_OPTIONAL.toString(),isOptional);
+            verbInputAtom.addAttribute(SystemVocabulary.VERB_ATOM_INPUT_OPTIONAL.toString(),!isOptional.equals("false"));
 
             verbAtom.addInputAtom(verbInputAtom, objectAtom);
             optedClassAtomStore.saveVerbAtom(verbAtom);

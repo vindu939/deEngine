@@ -3,7 +3,6 @@ package com.talentica.doEngine.client.telegram;
 import com.google.gson.Gson;
 import com.talentica.doEngine.client.telegram.model.Update;
 
-
 import java.io.Reader;
 
 /**

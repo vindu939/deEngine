@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talentica.doEngine.client.telegram.TelegramBot;
 import com.talentica.doEngine.client.telegram.request.SendMessage;
 import com.talentica.doEngine.session.*;
-import com.talentica.graphite.search.context.SystemQuery;
 import com.talentica.graphite.search.context.TextContext;
 import com.talentica.graphite.search.context.UserQuerySession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,35 +40,49 @@ public class Receiver implements Consumer<Event<Object>>{
             SystemState systemState = sessionMetaData.getSystemState();
             SessionState sessionState = sessionObject.getSessionState();
 
-            /*String authData = "{" +
-                    "\"access_token\": \"aa49e025-c4fe-4892-86af-15af2e6b72a2\"," +
-                    "\"token_type\": \"bearer\"," +
-                    "\"refresh_token\": \"97a9f978-7aad-4af7-9329-78ff2ce9962d\"," +
-                    "\"expires_in\": 43199," +
-                    "\"scope\": \"read write\"" +
-                    "}";*/
-            ObjectMapper mapper = new ObjectMapper();
             String responseData = context.getValue();
-            Map response = mapper.readValue(responseData, Map.class);
-            if(response.get("status") != null && (int) response.get("status") == 200){
-                String authData = (String) response.get("message");
-                SessionState targetSessionState = this.getTargetSessionState(sessionState, systemState);
-                if (targetSessionState == SessionState.AUTH_DONE){
-                    SessionManager.addUserAuthData(sessionId, authData);
-                }
-            } else {
+            String message = "";
+            boolean updateSession = true;
 
-            }
-
-            if(response.get("status") == null) {
-                String message = "";
+            if (systemState == SystemState.QUERY){
                 if (sessionState == SessionState.AUTH_INIT) {
                     message = "U need to be authenticated before proceeding so plz, ";
                 }
-                telegramBot.execute(new SendMessage(192591982, message + context.getValue()));
+
+                message = message + responseData;
+            } else {
+                ObjectMapper mapper = new ObjectMapper();
+                Map response = mapper.readValue(responseData, Map.class);
+                if(response.get("status") != null && (int) response.get("status") == 200){
+                    String authData = (String) response.get("data");
+                    SessionState targetSessionState = this.getTargetSessionState(sessionState, systemState);
+                    if (targetSessionState == SessionState.AUTH_DONE){
+                        SessionManager.addUserAuthData(sessionId, authData);
+                        message = "Hi! u have been authenticated \n How may I help u?";
+                    } else {
+                        message = "formatted response";
+                    }
+                } else if ((int) response.get("status") == 600) {
+                    message = (String) response.get("data");
+                    if (sessionMetaData.isGoodBye()){
+                        sessionMetaData.setOptedSessionType(SessionType.USER);
+                        sessionMetaData.setGoodBye(false);
+                    }
+                } else {
+                    //updateSession = false;
+                    if (response.get("data") != null && !((String)response.get("data")).isEmpty()) {
+                        message = (String) response.get("data");
+                    } else {
+                        message = "Oops! some issue with the server plz try later.";
+                    }
+                }
             }
 
-            updateSessionState(sessionId);
+            telegramBot.execute(new SendMessage(sessionMetaData.getUserId(), message));
+
+            if (updateSession) {
+                updateSessionState(sessionId);
+            }
         } catch (ClassCastException e){
 
         } catch (IOException e) {

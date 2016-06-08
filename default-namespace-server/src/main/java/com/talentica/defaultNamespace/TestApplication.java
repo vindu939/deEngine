@@ -1,7 +1,6 @@
 package com.talentica.defaultNamespace;
 
 import com.talentica.defaultNamespace.test.TestA;
-import com.talentica.defaultNamespace.test.TestB;
 import com.talentica.defaultNamespace.test.TestC;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

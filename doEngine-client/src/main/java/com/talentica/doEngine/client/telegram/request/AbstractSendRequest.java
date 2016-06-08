@@ -1,8 +1,8 @@
 package com.talentica.doEngine.client.telegram.request;
 
 
-import com.talentica.doEngine.client.telegram.response.SendResponse;
 import com.talentica.doEngine.client.telegram.model.request.Keyboard;
+import com.talentica.doEngine.client.telegram.response.SendResponse;
 
 /**
  * stas

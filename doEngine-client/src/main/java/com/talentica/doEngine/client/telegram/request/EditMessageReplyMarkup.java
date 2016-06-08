@@ -1,8 +1,8 @@
 package com.talentica.doEngine.client.telegram.request;
 
 
-import com.talentica.doEngine.client.telegram.response.BaseResponse;
 import com.talentica.doEngine.client.telegram.model.request.InlineKeyboardMarkup;
+import com.talentica.doEngine.client.telegram.response.BaseResponse;
 import com.talentica.doEngine.client.telegram.response.SendResponse;
 
 /**

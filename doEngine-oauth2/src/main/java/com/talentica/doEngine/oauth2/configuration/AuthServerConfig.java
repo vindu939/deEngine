@@ -65,7 +65,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
                     .secret("12345")
                     .authorizedGrantTypes("password", "authorization_code", "refresh_token", "client_credentials")
                     .scopes("read", "write")
-                    .accessTokenValiditySeconds(360);
+                    .accessTokenValiditySeconds(3600);
     }
 
     // JDSC Token Configuration

@@ -8,9 +8,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SkeletonRequest {
     private String action;
-    private String object;
+    private String clazz;
     private String label;
     private String property;
+    private String input;
 
     private String restEndpoint;
     private String endpointType;
@@ -27,12 +28,12 @@ public class SkeletonRequest {
         this.action = action;
     }
 
-    public String getObject() {
-        return object;
+    public String getClazz() {
+        return clazz;
     }
 
-    public void setObject(String object) {
-        this.object = object;
+    public void setClazz(String object) {
+        this.clazz = object;
     }
 
     public String getLabel() {
@@ -49,6 +50,14 @@ public class SkeletonRequest {
 
     public void setProperty(String property) {
         this.property = property;
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public void setInput(String input) {
+        this.input = input;
     }
 
     public String getRestEndpoint() {

@@ -1,10 +1,9 @@
 package com.talentica.doEngine.client.telegram.impl;
 
 import com.google.gson.Gson;
-
-import com.talentica.doEngine.client.telegram.response.BaseResponse;
 import com.talentica.doEngine.client.telegram.Callback;
 import com.talentica.doEngine.client.telegram.request.BaseRequest;
+import com.talentica.doEngine.client.telegram.response.BaseResponse;
 import okhttp3.*;
 
 import java.io.File;

@@ -2,7 +2,6 @@ import com.talentica.doEngine.client.telegram.Callback;
 import com.talentica.doEngine.client.telegram.TelegramBot;
 import com.talentica.doEngine.client.telegram.TelegramBotAdapter;
 import com.talentica.doEngine.client.telegram.request.BaseRequest;
-import com.talentica.doEngine.client.telegram.request.SendMessage;
 import com.talentica.doEngine.client.telegram.request.SetWebhook;
 import com.talentica.doEngine.client.telegram.response.BaseResponse;
 import org.junit.Test;
