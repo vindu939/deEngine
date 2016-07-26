@@ -1,5 +1,6 @@
 package com.talentica.defaultNamespace;
 
+import com.talentica.defaultNamespace.cubeData.User;
 import com.talentica.graphite.store.StoreResources;
 import com.talentica.graphite.store.api.annotation.GraphiteAnnotationParser;
 import com.talentica.graphite.store.atom.AtomType;
@@ -76,6 +77,15 @@ public class Application implements CommandLineRunner {
         GraphiteAnnotationParser gap = new GraphiteAnnotationParser(defaultStoreResources);
         final String[] packages = {"com.talentica.defaultNamespace.knowledge"};
         gap.parse(packages);
+
+        GraphiteAnnotationParser gap1 = new GraphiteAnnotationParser(optedStoreResources());
+        final String[] packages1 = {"com.talentica.defaultNamespace.cubeData"};
+        gap1.parse(packages1);
+
+        final ObjectAtomStore objectAtomStore = optedObjectAtomStore(optedStoreResources());
+        User user = new User("Aravind Pilla");
+        user.setUuid("12345");
+        objectAtomStore.writeObjectAtom(user);
     }
 
     public static void main(String[] args){

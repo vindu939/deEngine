@@ -1,20 +1,14 @@
 package com.talentica.doEngine.client.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
-import com.google.api.client.auth.oauth2.AuthorizationCodeTokenRequest;
-import com.google.api.client.auth.oauth2.TokenResponse;
-import com.uber.sdk.rides.auth.OAuth2Credentials;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.beans.factory.annotation.Value;
+import com.talentica.doEngine.client.telegram.TelegramBot;
+import com.talentica.doEngine.client.telegram.request.SendMessage;
+import com.talentica.doEngine.session.SessionManager;
+import com.talentica.doEngine.session.SessionMetaData;
+import com.talentica.doEngine.session.SessionObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,63 +18,17 @@ import java.util.Map;
 @RequestMapping("/")
 public class AuthController {
 
-    @Value("${clientId}")
-    private String clientId;
+    @Autowired
+    private TelegramBot telegramBot;
 
-    @Value("${clientSecret}")
-    private String clientSecret;
-
-    @Value("${redirectUrl}")
-    private String redirectUrl;
-
-    @RequestMapping(value = "Callback", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "authCallback", method = RequestMethod.POST, consumes = "application/json")
     @ResponseBody
-    public void callback(@RequestParam(value = "state", required = false) String state, @RequestParam("code") String code){
-
-        OAuth2Credentials oAuth2Credentials = new OAuth2Credentials.Builder()
-                .setRedirectUri(redirectUrl)
-                .setClientSecrets(clientId, clientSecret)
-                .build();
-
-        AuthorizationCodeFlow authorizationCodeFlow = oAuth2Credentials.getAuthorizationCodeFlow();
-        AuthorizationCodeTokenRequest tokenRequest = authorizationCodeFlow.newTokenRequest(code);
-
-        TokenResponse tokenResponse = null;
-        try {
-            tokenResponse = tokenRequest
-                    .setRedirectUri(redirectUrl)
-                    .execute();
-
-            ObjectMapper mapper = new ObjectMapper();
-            String JSON_RESPONSE = mapper.writeValueAsString(tokenResponse);
-            HttpClient client = HttpClientBuilder.create().build();
-            HttpPost post = new HttpPost("http://localhost:8080/authCallback");
-            post.setHeader("Content-Type", "application/json");
-
-            Map<String, String> obj = new HashMap<>();
-            obj.put("state", state);
-            obj.put("auth", JSON_RESPONSE);
-
-            JSON_RESPONSE = mapper.writeValueAsString(obj);
-
-            StringEntity entity = new StringEntity(JSON_RESPONSE, "UTF-8");
-            post.setEntity(entity);
-
-            HttpResponse response = client.execute(post);
-            System.out.println("Response Code : "
-                    + response.getStatusLine().getStatusCode());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
+    public void callback(@RequestBody Map data) throws IOException {
+        String sessionId = (String) data.get("state");
+        String authdata = (String) data.get("auth");
+        SessionManager.addUserAuthData(sessionId, authdata);
+        SessionObject sessionObject = SessionManager.getSession(sessionId);
+        SessionMetaData sessionMetaData = sessionObject.getSessionMetaData();
+        telegramBot.execute(new SendMessage(sessionMetaData.getUserId(), "you have been authenticated! How may I help u?"));
     }
-
-    @RequestMapping(value = "authUrl", method = RequestMethod.GET)
-    @ResponseBody
-    public String getAuthUrl(){
-        return "https://login.uber.com/oauth/v2/authorize?client_id=" + clientId + "&response_type=code";
-    }
-
 }

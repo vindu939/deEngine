@@ -66,10 +66,15 @@ public class Receiver implements Consumer<Event<Object>> {
         }
         // Find a better way to handle the commands
         if(sessionObject.getSessionState() == SessionState.AUTH_INIT){
-            textMessage = "login";
-            uqs.addHeader("Authorization", sessionMetaData.getBasicAuthToken());
-            uqs.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            uqs.setBusinessEndpointUrl("http://localhost:8081");
+            if(sessionMetaData.getOptedSessionType() == SessionType.ADMIN) {
+                textMessage = "login";
+                uqs.addHeader("Authorization", sessionMetaData.getBasicAuthToken());
+                uqs.addHeader("Content-Type", "application/x-www-form-urlencoded");
+                uqs.setBusinessEndpointUrl("http://localhost:8081");
+            } else {
+                textMessage = "userLogin";
+                uqs.setBusinessEndpointUrl("http://localhost:8083");
+            }
         }
 
         if(sessionMetaData.isAuthRequired() && sessionMetaData.getAuthToken() != null){

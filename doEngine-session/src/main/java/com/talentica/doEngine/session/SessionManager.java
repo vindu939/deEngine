@@ -107,14 +107,14 @@ public class SessionManager {
     }
 
     public static void addUserAuthData(String sessionId, String authData) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        AuthObject authObject = objectMapper.readValue(authData, AuthObject.class);
+
         SessionObject sessionObject = SessionManager.getSession(sessionId);
         SessionMetaData sessionMetaData = sessionObject.getSessionMetaData();
 
         int userId =  sessionMetaData.getUserId();
         SessionType sessionType = sessionMetaData.getOptedSessionType();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        AuthObject authObject = objectMapper.readValue(authData, AuthObject.class);
         userAuthMap.put(userId+"_"+sessionType, authObject);
     }
 }

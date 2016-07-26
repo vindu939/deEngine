@@ -72,4 +72,7 @@ public class DefaultActions {
             @VerbInput(userQuery = "Enter password", label = "password") FreeText password,
             @VerbInput(userQuery = "", isOptional = true, label = "grant_type", value = "password") FreeText grantType
     ){}
+
+    @VerbNode(restEndpoint = "/authUrl", endpointType = "GET", synonym = "")
+    public void userLogin(){}
 }

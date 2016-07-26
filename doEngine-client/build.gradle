@@ -27,13 +27,11 @@ repositories {
 dependencies {
     compile "org.springframework.boot:spring-boot-starter",
             "org.springframework.boot:spring-boot-starter-web",
-            /*"org.springframework.boot:spring-boot-starter-security",
-            "org.springframework.security.oauth:spring-security-oauth2",*/
             "io.projectreactor:reactor-bus",
             "com.google.code.gson:gson:2.6.2",
             "com.squareup.okhttp3:okhttp:3.2.0",
-            "com.squareup.okhttp3:logging-interceptor:3.2.0",
-            "com.google.guava:guava:r05"
+            "com.squareup.okhttp3:logging-interceptor:3.3.1"
+            /*"com.google.guava:guava:r05"*/
 
 
     compile project(':doEngine-core')

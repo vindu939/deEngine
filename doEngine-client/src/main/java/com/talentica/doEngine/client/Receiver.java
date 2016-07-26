@@ -54,13 +54,22 @@ public class Receiver implements Consumer<Event<Object>>{
                 ObjectMapper mapper = new ObjectMapper();
                 Map response = mapper.readValue(responseData, Map.class);
                 if(response.get("status") != null && (int) response.get("status") == 200){
-                    String authData = (String) response.get("data");
+                    String data = (String) response.get("data");
                     SessionState targetSessionState = this.getTargetSessionState(sessionState, systemState);
                     if (targetSessionState == SessionState.AUTH_DONE){
-                        SessionManager.addUserAuthData(sessionId, authData);
-                        message = "Hi! u have been authenticated \n How may I help u?";
+                        if (sessionMetaData.getOptedSessionType() == SessionType.USER){
+                            message = "Please authenticate ur self by clicking the below link ... \n";
+                            message = message + data + "&state=" + sessionId + "_" + sessionMetaData.getUserId();
+                        } else {
+                            SessionManager.addUserAuthData(sessionId, data);
+                            message = "Hi! u have been authenticated \n How may I help u?";
+                        }
                     } else {
-                        message = "formatted response";
+                        if (sessionMetaData.getOptedSessionType() == SessionType.ADMIN) {
+                            message = "formatted response";
+                        } else {
+                            message = data;
+                        }
                     }
                 } else if ((int) response.get("status") == 600) {
                     message = (String) response.get("data");

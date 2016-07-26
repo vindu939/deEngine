@@ -3,6 +3,7 @@ package com.talentica.doEngine.client.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talentica.doEngine.client.Publisher;
+import com.talentica.doEngine.client.telegram.model.Location;
 import com.talentica.doEngine.client.telegram.model.Message;
 import com.talentica.doEngine.client.telegram.model.MessageEntity;
 import com.talentica.doEngine.client.telegram.model.Update;
@@ -43,6 +44,10 @@ public class WebhookController {
 
             //Integer userId = 192591982;
             String text = message.getText();
+            if (text == null || text.isEmpty()){
+                Location location = message.getLocation();
+                text =  location.getLatitude() + ":" + location.getLongitude();
+            }
             // find the type od session required
             SessionType optedType = SessionType.USER;
             if (message.getEntities() != null && message.getEntities().length > 0){
@@ -66,6 +71,12 @@ public class WebhookController {
             e.printStackTrace();
         }
 
+        return "200";
+    }
+
+    @RequestMapping(value = "status", method = RequestMethod.POST, consumes = "application/json")
+    public String status(@RequestBody Object data){
+        System.out.println(data);
         return "200";
     }
 

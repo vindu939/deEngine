@@ -55,11 +55,6 @@
     <orderEntry type="library" name="Gradle: org.springframework:spring-expression:4.2.6.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: com.goldmansachs:gs-collections-api:5.1.0" level="project" />
     <orderEntry type="module" module-name="doEngine-core" />
-    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.6.2" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.2.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:logging-interceptor:3.2.0" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.guava:guava:r05" level="project" />
-    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.6.0" level="project" />
     <orderEntry type="module" module-name="doEngine-session" />
     <orderEntry type="library" name="Gradle: com.talentica:graphite-search:0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.talentica:graphite-store:0.1" level="project" />
@@ -84,5 +79,13 @@
     <orderEntry type="library" name="Gradle: org.eclipse.jetty:jetty-util:9.2.16.v20160414" level="project" />
     <orderEntry type="library" name="Gradle: xml-apis:xml-apis:1.0.b2" level="project" />
     <orderEntry type="library" name="Gradle: commons-codec:commons-codec:1.5" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:18.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.6.2" level="project" />
+    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.8.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:logging-interceptor:3.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.6.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.maps:google-maps-services:0.1.15" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp:okhttp:2.7.5" level="project" />
   </component>
 </module>

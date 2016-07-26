@@ -9,6 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Uber" />
             <option value="$PROJECT_DIR$/default-namespace-server" />
             <option value="$PROJECT_DIR$/doEngine-client" />
             <option value="$PROJECT_DIR$/doEngine-core" />
@@ -20,6 +21,7 @@
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/Uber" />
             <option value="$PROJECT_DIR$/default-namespace-server" />
             <option value="$PROJECT_DIR$/doEngine-client" />
             <option value="$PROJECT_DIR$/doEngine-core" />

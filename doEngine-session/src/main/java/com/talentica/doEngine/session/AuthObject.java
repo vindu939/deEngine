@@ -1,10 +1,12 @@
 package com.talentica.doEngine.session;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by aravindp on 30/5/16.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthObject {
 
     @JsonProperty(value = "access_token")

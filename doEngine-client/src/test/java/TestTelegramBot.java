@@ -17,7 +17,7 @@ public class TestTelegramBot {
     public void test() {
         String TELEGRAM_BOT_TOKEN = "197123987:AAESOiX9Pl2x_DMbE1P6stXV-OKBGyAE6QU";
         TelegramBot telegramBot = TelegramBotAdapter.build(TELEGRAM_BOT_TOKEN);
-        telegramBot.execute(new SetWebhook().url("https://435d603e.ngrok.io"),new Callback() {
+        telegramBot.execute(new SetWebhook().url(""),new Callback() {
             @Override
             public void onResponse(BaseRequest request, BaseResponse response) {
                 System.out.println("got response : " + response);

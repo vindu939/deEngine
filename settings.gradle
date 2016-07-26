@@ -5,4 +5,5 @@ include 'default-namespace-server'
 include 'doEngine-session'
 include 'doEngine-oauth2'
 include 'doEngine-test'
+include 'Uber'
 
